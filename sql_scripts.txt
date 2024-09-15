@@ -1,0 +1,54 @@
+CREATE TABLE Product (
+    product_id INT PRIMARY KEY,
+    price DECIMAL(10, 2),
+    name VARCHAR(255)
+);
+
+CREATE TABLE User (
+    user_id INT PRIMARY KEY,
+    username VARCHAR(255),
+    email VARCHAR(255),
+    role ENUM('Customer', 'EcoReviewer') NOT NULL
+);
+
+CREATE TABLE Category (
+    category_id INT PRIMARY KEY,
+    name VARCHAR(255),
+    description VARCHAR(255),
+    category_type ENUM('Clothing', 'Food', 'Electronics') NOT NULL
+);
+
+CREATE TABLE EcoRating (
+    eco_rating_id INT PRIMARY KEY,
+    total_rating INT CHECK (total_rating BETWEEN 1 AND 100),
+    certification VARCHAR(255),
+    audit_date DATE,
+    sustainability INT,
+    carbon_footprint INT
+);
+CREATE TABLE Purchases (
+    purchase_id INT PRIMARY KEY AUTO_INCREMENT,
+    purchase_date DATE,
+    user_id INT,
+    product_id INT,
+    FOREIGN KEY (user_id) REFERENCES User (user_id),
+    FOREIGN KEY (product_id) REFERENCES Product (product_id)
+);
+
+CREATE TABLE RatedBy(
+	product_id INT UNIQUE,
+	total_rating INT,
+	PRIMARY KEY(product_id, total_rating),
+	FOREIGN KEY (product_id) REFERENCES Product (product_id),
+	FOREIGN KEY (total_rating) REFERENCES EcoRating (total_rating)
+	
+);
+
+CREATE TABLE BelongsTo(
+	product_id INT UNIQUE,
+	category_id INT,
+	PRIMARY KEY (product_id, category_id),
+	FOREIGN KEY (product_id) REFERENCES Product (product_id),
+	FOREIGN KEY (category_id) REFERENCES Category (category_id)
+	
+);
