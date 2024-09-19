@@ -37,10 +37,10 @@ CREATE TABLE Purchases (
 
 CREATE TABLE RatedBy(
 	product_id INT UNIQUE,
-	total_rating INT,
-	PRIMARY KEY(product_id, total_rating),
+	eco_rating_id INT,
+	PRIMARY KEY(product_id, eco_rating_id),
 	FOREIGN KEY (product_id) REFERENCES Product (product_id),
-	FOREIGN KEY (total_rating) REFERENCES EcoRating (total_rating)
+	FOREIGN KEY (eco_rating_id) REFERENCES EcoRating (eco_rating_id)
 	
 );
 
