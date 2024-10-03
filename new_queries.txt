@@ -1,0 +1,106 @@
+INSERT INTO Product (product_id, price, name)
+VALUES 
+(1, 49.99, 'Eco-Friendly T-shirt'),
+(2, 12.50, 'Organic Snack Bar'),
+(3, 599.99, 'Solar-Powered Smartphone'),
+(4, 120.00, 'Recycled Plastic Jacket'),
+(5, 300.00, 'Energy Efficient LED TV');
+
+INSERT INTO User (user_id, username, email, role)
+VALUES 
+(1, 'john_doe', 'john@example.com', 'Customer'),
+(2, 'eco_warrior', 'eco@example.com', 'EcoReviewer'),
+(3, 'jane_smith', 'jane@example.com', 'Customer'),
+(4, 'sustainable_living', 'living@example.com', 'EcoReviewer');
+
+INSERT INTO Category (category_id, name, description, category_type)
+VALUES 
+(1, 'T-shirts', 'Sustainable and organic clothing', 'Clothing'),
+(2, 'Snacks', 'Organic and fair-trade food items', 'Food'),
+(3, 'Electronics', 'Energy-efficient and eco-friendly electronics', 'Electronics'),
+(4, 'Outerwear', 'Jackets made from recycled materials', 'Clothing'),
+(5, 'TVs', 'Energy-efficient televisions', 'Electronics');
+
+INSERT INTO EcoRating (eco_rating_id, total_rating, certification, audit_date, sustainability, carbon_footprint)
+VALUES 
+(1, 85, 'Certified Organic', '2023-03-15', 90, 10),
+(2, 60, 'Fair Trade', '2022-10-22', 75, 25),
+(3, 95, 'Energy Star', '2024-01-10', 98, 2),
+(4, 70, 'Recycled Materials', '2023-07-05', 80, 20),
+(5, 88, 'Low Carbon', '2023-11-12', 92, 8);
+
+INSERT INTO Purchases (purchase_id, purchase_date, user_id, product_id)
+VALUES 
+(1, '2024-09-25', 1, 1),
+(2, '2024-09-26', 3, 2),
+(3, '2024-09-27', 1, 4),
+(4, '2024-09-28', 2, 3),
+(5, '2024-09-29', 4, 5);
+
+INSERT INTO RatedBy (product_id, eco_rating_id)
+VALUES 
+(1, 1),
+(2, 2),
+(3, 3),
+(4, 4),
+(5, 5);
+
+INSERT INTO BelongsTo (product_id, category_id)
+VALUES 
+(1, 1),
+(2, 2),
+(3, 3),
+(4, 4),
+(5, 5);
+
+
+-- Joining Product with EcoRating
+SELECT Product.product_id, Product.name, RatedBy.eco_rating_id, EcoRating.total_rating
+FROM Product
+INNER JOIN RatedBy ON Product.product_id = RatedBy.product_id
+INNER JOIN EcoRating ON RatedBy.eco_rating_id = EcoRating.eco_rating_id;
+
+-- Joining Product with Category
+SELECT Product.product_id, Product.name, BelongsTo.category_id, Category.name
+FROM Product
+INNER JOIN BelongsTo ON Product.product_id = BelongsTo.product_id
+INNER JOIN Category ON BelongsTo.category_id = Category.category_id;
+
+-- All products that have an eco-rating higher than 80
+SELECT Product.name, EcoRating.total_rating
+FROM Product
+INNER JOIN RatedBy ON Product.product_id = RatedBy.product_id
+INNER JOIN EcoRating ON RatedBy.eco_rating_id = EcoRating.eco_rating_id
+WHERE EcoRating.total_rating > 80;
+
+-- Get the minimum total rating and certification grouped by audit date
+SELECT MIN(total_rating), certification
+FROM EcoRating
+GROUP BY audit_date;
+
+-- Get the sum of prices grouped by product name
+SELECT SUM(price), name
+FROM Product
+GROUP BY name;
+
+-- Count the number of products for each category that have been purchased, grouped by Category
+SELECT COUNT(Purchases.product_id) AS total_purchases, Category.name
+FROM Product
+INNER JOIN Purchases ON Product.product_id = Purchases.product_id
+INNER JOIN BelongsTo ON Product.product_id = BelongsTo.product_id
+INNER JOIN Category ON BelongsTo.category_id = Category.category_id
+GROUP BY Category.name
+HAVING COUNT(Purchases.product_id) > 2;  
+
+
+
+
+
+
+
+
+
+
+
+
+

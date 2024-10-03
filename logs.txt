@@ -1,0 +1,91 @@
+MariaDB [sillia_db]> -- Joining Product with EcoRating
+, EcoRating.totaMariaDB [sillia_db]> SELECT Product.product_id, Product.name, RatedBy.eco_rating_id, EcoRating.total_rating
+     -> RatedBy ON Product.product_id = RatedBy.productFROM Product
+    -> INNER JOIN RatedBy ON Product.product_id = RatedBy.product_id
+    -> INNER JOIN EcoRating ON RatedBy.eco_rating_id = EcoRating.eco_rating_id;
+ Joining Product+------------+--------------------------+---------------+--------------+
+| product_id | name                     | eco_rating_id | total_rating |
++------------+--------------------------+---------------+--------------+
+|          1 | Eco-Friendly T-shirt     |             1 |           85 |
+|          2 | Organic Snack Bar        |             2 |           60 |
+|          3 | Solar-Powered Smartphone |             3 |           95 |
+|          4 | Recycled Plastic Jacket  |             4 |           70 |
+|          5 | Energy Efficient LED TV  |             5 |           88 |
++------------+--------------------------+---------------+--------------+
+5 rows in set (0.001 sec)
+
+MariaDB [sillia_db]>
+MariaDB [sillia_db]> -- Joining Product with Category
+MariaDB [sillia_db]> SELECT Product.product_id, Product.name, BelongsTo.category_id, Category.name
+    -> FROM Product
+    -> INNER JOIN BelongsTo ON Product.product_id = BelongsTo.product_id
+    -> INNER JOIN Category ON BelongsTo.category_id = Category.category_id;
+s that have an e+------------+--------------------------+-------------+-------------+
+| product_id | name                     | category_id | name        |
++------------+--------------------------+-------------+-------------+
+|          1 | Eco-Friendly T-shirt     |           1 | T-shirts    |
+|          2 | Organic Snack Bar        |           2 | Snacks      |
+|          3 | Solar-Powered Smartphone |           3 | Electronics |
+|          4 | Recycled Plastic Jacket  |           4 | Outerwear   |
+|          5 | Energy Efficient LED TV  |           5 | TVs         |
++------------+--------------------------+-------------+-------------+
+5 rows in set (0.000 sec)
+
+MariaDB [sillia_db]>
+MariaDB [sillia_db]> -- All products that have an eco-rating higher than 80
+MariaDB [sillia_db]> SELECT Product.name, EcoRating.total_rating
+    -> FROM Product
+    -> INNER JOIN RatedBy ON Product.product_id = RatedBy.product_id
+    -> INNER JOIN EcoRating ON RatedBy.eco_rating_id = EcoRating.eco_rating_id
+    -> WHERE EcoRating.total_rating > 80;
+et the minimum t+--------------------------+--------------+
+| name                     | total_rating |
++--------------------------+--------------+
+| Eco-Friendly T-shirt     |           85 |
+| Solar-Powered Smartphone |           95 |
+| Energy Efficient LED TV  |           88 |
++--------------------------+--------------+
+3 rows in set (0.000 sec)
+
+MariaDB [sillia_db]>
+MariaDB [sillia_db]> -- Get the minimum total rating and certification grouped by audit date
+MariaDB [sillia_db]> SELECT MIN(total_rating), certification
+    -> FROM EcoRating
+    -> GROUP BY audit_date;
++-------------------+--------------------+
+| MIN(total_rating) | certification      |
++-------------------+--------------------+
+|                60 | Fair Trade         |
+|                85 | Certified Organic  |
+|                70 | Recycled Materials |
+|                88 | Low Carbon         |
+|                95 | Energy Star        |
++-------------------+--------------------+
+5 rows in set (0.000 sec)
+
+MariaDB [sillia_db]>
+MariaDB [sillia_db]> -- Get the sum of prices grouped by product name
+MariaDB [sillia_db]> SELECT SUM(price), name
+    -> FROM Product
+    -> GROUP BY name;
++------------+--------------------------+
+| SUM(price) | name                     |
++------------+--------------------------+
+|      49.99 | Eco-Friendly T-shirt     |
+|     300.00 | Energy Efficient LED TV  |
+|      12.50 | Organic Snack Bar        |
+|     120.00 | Recycled Plastic Jacket  |
+|     599.99 | Solar-Powered Smartphone |
++------------+--------------------------+
+5 rows in set (0.000 sec)
+
+MariaDB [sillia_db]>
+MariaDB [sillia_db]> -- Count the number of products for each category that have been purchased, grouped by Category
+MariaDB [sillia_db]> SELECT COUNT(Purchases.product_id) AS total_purchases, Category.name
+    -> FROM Product
+    -> INNER JOIN Purchases ON Product.product_id = Purchases.product_id
+    -> INNER JOIN BelongsTo ON Product.product_id = BelongsTo.product_id
+    -> INNER JOIN Category ON BelongsTo.category_id = Category.category_id
+    -> GROUP BY Category.name
+    -> HAVING COUNT(Purchases.product_id) > 2;
+Empty set (0.001 sec)
