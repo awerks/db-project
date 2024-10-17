@@ -1,4 +1,5 @@
 from flask import Flask, render_template, request, send_from_directory
+from os import environ
 import pymysql
 
 # from sshtunnel import SSHTunnelForwarder
@@ -7,15 +8,15 @@ app = Flask(__name__, static_url_path="/static")
 
 # testing purposes
 
-# SSH_HOST = "5.75.182.107"
-# SSH_USERNAME = "sillia"
-# SSH_PASSWORD = "sillia"
+# SSH_HOST = environ.get("SSH_HOST")
+# SSH_USERNAME =  environ.get("SSH_USERNAME")
+# SSH_PASSWORD = environ.get("SSH_PASSWORD")
 
 MYSQL_HOST = "localhost"
 MYSQL_PORT = 3306
-MYSQL_USER = "sillia"
-MYSQL_PASSWORD = "sillia"
-MYSQL_DB = "sillia_db"
+MYSQL_USER = environ.get("MYSQL_USER")
+MYSQL_PASSWORD = environ.get("MYSQL_PASSWORD")
+MYSQL_DB = environ.get("MYSQL_DB")
 
 
 def get_db_connection():
