@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Sustainable Shopping Assistant - Search Results">
+    <title>Search Results | Sustainable Shopping Assistant</title>
+    <link rel="stylesheet" href="/static/styles/style.css">
+    <style>
+        body {
+            font-family: "Poppins", sans-serif;
+            font-optical-sizing: auto;
+            line-height: 1.6;
+            background-color: #f4f4f4;
+        }
+
+        header {
+            background-color: #2c8a33;
+            color: white;
+            padding: 15px 0;
+            text-align: center;
+            border-bottom: 3px solid #208a30;
+        }
+
+        header .highlight {
+            color: #ffdd57;
+        }
+
+        header .logo h1 {
+            font-size: 2rem;
+        }
+
+        nav ul {
+            list-style: none;
+            text-align: center;
+        }
+
+        nav ul li {
+            display: inline;
+            margin: 0 15px;
+        }
+
+        nav ul li a {
+            text-decoration: none;
+            color: white;
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
+
+
+        main {
+            margin: 40px auto;
+            max-width: 900px;
+            padding: 20px;
+            background-color: #ffffff;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+
+        h2 {
+            font-size: 2em;
+            color: #27ae60;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .results-list {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .results-list li {
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .results-list li a {
+            text-decoration: none;
+            color: #27ae60;
+            font-weight: 600;
+        }
+
+        .results-list li a:hover {
+            text-decoration: underline;
+        }
+
+        .no-results {
+            text-align: center;
+            font-size: 1.2em;
+            color: #888;
+        }
+
+        footer {
+            margin-top: 40px;
+            padding: 20px;
+            background-color: #2c8a33;
+            color: white;
+            text-align: center;
+        }
+
+        footer p {
+            margin: 0;
+        }
+
+        footer a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <div class="logo">
+            <img src="/static/images/favicon.ico" alt="Sustainable Shopping Assistant logo">
+            <h1><span class="highlight">Sustainable</span> Shopping Assistant</h1>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="/">Home</a></li>
+                <li><a href="/categories">Categories</a></li>
+                <li><a href="/wishlist">Wishlist</a></li>
+                <li><a href="/imprint">Imprint</a></li>
+                <li><a href="/maintenance">Maintenance</a></li>
+                <li><a href="/search">Search</a></li>
+
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <h2>Search Results</h2>
+        {% if results and results|length > 0 %}
+        <ul class="results-list">
+            {% for result in results %}
+            <li>
+                <a href="/detail/{{ result['id'] }}">Result ID: {{ result['id'] }}</a>
+                <ul>
+                    {% for key, value in result.items() %}
+                    {% if key != 'id' %}
+                    <li><strong>{{ key.replace('_', ' ').capitalize() }}:</strong> {{ value }}</li>
+                    {% endif %}
+                    {% endfor %}
+                </ul>
+            </li>
+            {% endfor %}
+        </ul>
+        {% else %}
+        <p class="no-results">No results found for your search. Please try again.</p>
+        {% endif %}
+    </main>
+
+    <footer>
+        <section class="disclaimer">
+            <p>This website is student lab work and does not necessarily reflect Constructor University opinions.</p>
+        </section>
+        <section class="footer-links">
+            <p>&copy; 2024 Sustainable Shopping Assistant | <a href="/imprint">Imprint</a></p>
+        </section>
+    </footer>
+</body>
+
+</html>

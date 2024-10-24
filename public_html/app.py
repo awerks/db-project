@@ -19,7 +19,7 @@ MYSQL_PASSWORD = environ.get("MYSQL_PASSWORD")
 MYSQL_DB = environ.get("MYSQL_DB")
 
 
-def get_db_connection():
+def connect_db():
     # server = SSHTunnelForwarder(
     #     (SSH_HOST, 22),
     #     ssh_username=SSH_USERNAME,
@@ -48,9 +48,52 @@ def maintenance():
     return send_from_directory("static", "maintenance.html")
 
 
+@app.route("/search")
+def searchh():
+    return send_from_directory("static", "search.html")
+
+
 @app.route("/imprint")
 def imprint():
     return send_from_directory("static", "imprint.html")
+
+
+@app.route("/search_fields", methods=["POST"])
+def search():
+    form_data = request.form.to_dict()
+
+    search_criteria = {k: v for k, v in form_data.items() if v}
+
+    print("Search Criteria:", search_criteria)
+
+    results = []
+    if "product_id" in search_criteria:
+        results = [
+            {"id": 1, "name": "Eco-friendly T-shirt", "price": 19.99},
+            {"id": 2, "name": "Reusable Water Bottle", "price": 9.99},
+        ]
+    elif "username" in search_criteria:
+        results = [
+            {"id": 1, "username": "john_doe", "email": "john@example.com"},
+            {"id": 2, "username": "jane_doe", "email": "jane@example.com"},
+        ]
+
+    return render_template("search_results.html", results=results)
+
+
+@app.route("/detail/<int:id>", methods=["GET"])
+def detail(id):
+    result = {
+        "id": id,
+        "name": "Eco-friendly T-shirt",
+        "price": 19.99,
+        "description": "A soft, organic cotton t-shirt.",
+        "category": "Clothing",
+        "sustainability": 85,
+        "carbon_footprint": 12,
+    }
+
+    return render_template("details.html", result=result)
 
 
 @app.route("/product_input")
@@ -146,7 +189,7 @@ def submit_product():
     name = request.form["name"]
     price = request.form["price"]
 
-    connection, server = get_db_connection()
+    connection, server = connect_db()
     try:
         with connection.cursor() as cursor:
             cursor.execute("INSERT INTO Product (name, price) VALUES (%s, %s)", (name, price))
@@ -167,7 +210,7 @@ def submit_user():
     email = request.form["email"]
     role = request.form["role"]
 
-    connection, server = get_db_connection()
+    connection, server = connect_db()
     try:
         with connection.cursor() as cursor:
             cursor.execute("INSERT INTO User (username, email, role) VALUES (%s, %s, %s)", (username, email, role))
@@ -188,7 +231,7 @@ def submit_category():
     description = request.form["description"]
     category_type = request.form["category_type"]
 
-    connection, server = get_db_connection()
+    connection, server = connect_db()
     try:
         with connection.cursor() as cursor:
             cursor.execute(
@@ -214,7 +257,7 @@ def submit_eco_rating():
     sustainability = request.form["sustainability"]
     carbon_footprint = request.form["carbon_footprint"]
 
-    connection, server = get_db_connection()
+    connection, server = connect_db()
     try:
         with connection.cursor() as cursor:
             cursor.execute(
@@ -238,7 +281,7 @@ def submit_purchase():
     user_id = request.form["user_id"]
     product_id = request.form["product_id"]
 
-    connection, server = get_db_connection()
+    connection, server = connect_db()
     try:
         with connection.cursor() as cursor:
             cursor.execute(
