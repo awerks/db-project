@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, send_from_directory
+from flask import Flask, render_template, request, send_from_directory, jsonify
 from os import environ
 import pymysql
 
@@ -49,7 +49,7 @@ def maintenance():
 
 
 @app.route("/search")
-def searchh():
+def searhh():
     return send_from_directory("static", "search.html")
 
 
@@ -79,6 +79,29 @@ def search():
         ]
 
     return render_template("search_results.html", results=results)
+
+
+@app.route("/login", methods=["GET"])
+def admin():
+    return send_from_directory("static", "login.html")
+
+
+@app.route("/authenticate", methods=["POST"])
+def admin_authenticate():
+    username = request.form.get("username")
+    password = request.form.get("password")
+
+    if not username or not password:
+        return jsonify({"message": "Username and password are required."}), 400
+
+    if username == "admin" and password == "admin":
+        return send_from_directory("static", "maintenance.html")
+    else:
+        return jsonify({"message": "Invalid username or password."}), 401
+
+
+if __name__ == "__main__":
+    app.run(debug=True)
 
 
 @app.route("/detail/<int:id>", methods=["GET"])
