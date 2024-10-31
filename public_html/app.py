@@ -100,10 +100,6 @@ def admin_authenticate():
         return jsonify({"message": "Invalid username or password."}), 401
 
 
-if __name__ == "__main__":
-    app.run(debug=True)
-
-
 @app.route("/detail/<int:id>", methods=["GET"])
 def detail(id):
     result = {
@@ -212,7 +208,9 @@ def submit_product():
     name = request.form["name"]
     price = request.form["price"]
 
-    connection, server = connect_db()
+    # connection, server = connect_db()
+    connection = connect_db()
+
     try:
         with connection.cursor() as cursor:
             cursor.execute("INSERT INTO Product (name, price) VALUES (%s, %s)", (name, price))
@@ -222,7 +220,7 @@ def submit_product():
         print(f"Error occurred: {str(e)}")
     finally:
         connection.close()
-        server.stop()
+        # server.stop()
 
     return render_template("feedback_template.html", success=True)
 
@@ -233,7 +231,9 @@ def submit_user():
     email = request.form["email"]
     role = request.form["role"]
 
-    connection, server = connect_db()
+    # connection, server = connect_db()
+    connection = connect_db()
+
     try:
         with connection.cursor() as cursor:
             cursor.execute("INSERT INTO User (username, email, role) VALUES (%s, %s, %s)", (username, email, role))
@@ -243,7 +243,7 @@ def submit_user():
         print(f"Error occurred: {str(e)}")
     finally:
         connection.close()
-        server.stop()
+        # server.stop()
 
     return render_template("feedback_template.html", success=True)
 
@@ -254,7 +254,9 @@ def submit_category():
     description = request.form["description"]
     category_type = request.form["category_type"]
 
-    connection, server = connect_db()
+    # connection, server = connect_db()
+    connection = connect_db()
+
     try:
         with connection.cursor() as cursor:
             cursor.execute(
@@ -267,7 +269,7 @@ def submit_category():
         print(f"Error occurred: {str(e)}")
     finally:
         connection.close()
-        server.stop()
+        # server.stop()
 
     return render_template("feedback_template.html", success=True)
 
@@ -280,7 +282,9 @@ def submit_eco_rating():
     sustainability = request.form["sustainability"]
     carbon_footprint = request.form["carbon_footprint"]
 
-    connection, server = connect_db()
+    # connection, server = connect_db()
+    connection = connect_db()
+
     try:
         with connection.cursor() as cursor:
             cursor.execute(
@@ -293,7 +297,7 @@ def submit_eco_rating():
         print(f"Error occurred: {str(e)}")
     finally:
         connection.close()
-        server.stop()
+        # server.stop()
 
     return render_template("feedback_template.html", success=True)
 
@@ -304,7 +308,9 @@ def submit_purchase():
     user_id = request.form["user_id"]
     product_id = request.form["product_id"]
 
-    connection, server = connect_db()
+    # connection, server = connect_db()
+    connection = connect_db()
+
     try:
         with connection.cursor() as cursor:
             cursor.execute(
@@ -317,7 +323,7 @@ def submit_purchase():
         print(f"Error occurred: {str(e)}")
     finally:
         connection.close()
-        server.stop()
+        # server.stop()
 
     return render_template("feedback_template.html", success=True)
 
