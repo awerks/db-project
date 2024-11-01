@@ -17,6 +17,7 @@ MYSQL_PORT = 3306
 MYSQL_USER = environ.get("MYSQL_USER")
 MYSQL_PASSWORD = environ.get("MYSQL_PASSWORD")
 MYSQL_DB = environ.get("MYSQL_DB")
+LOCAL_PORT = 49868
 
 
 def connect_db():
@@ -25,12 +26,12 @@ def connect_db():
     #     ssh_username=SSH_USERNAME,
     #     ssh_password=SSH_PASSWORD,
     #     remote_bind_address=(MYSQL_HOST, MYSQL_PORT),
-    # )
+    # )c
     # server.start()
 
     connection = pymysql.connect(
         host=MYSQL_HOST,
-        # port=server.local_bind_port,
+        port=LOCAL_PORT,
         user=MYSQL_USER,
         password=MYSQL_PASSWORD,
         db=MYSQL_DB,
@@ -88,16 +89,20 @@ def admin():
 
 @app.route("/authenticate", methods=["POST"])
 def admin_authenticate():
-    username = request.form.get("username")
-    password = request.form.get("password")
-
-    if not username or not password:
-        return jsonify({"message": "Username and password are required."}), 400
-
-    if username == "admin" and password == "admin":
-        return send_from_directory("static", "maintenance.html")
-    else:
-        return jsonify({"message": "Invalid username or password."}), 401
+    form_username = request.form.get("username")
+    form_password = request.form.get("password")
+    connection = connect_db()
+    with connection.cursor() as cursor:
+        cursor.execute("SELECT username, password FROM User WHERE role = 'Admin'")
+        result = cursor.fetchone()
+        if result:
+            admin_username, admin_password = result
+            if form_username == admin_username and form_password == admin_password:
+                return send_from_directory("static", "maintenance.html")
+            else:
+                return jsonify({"message": "Invalid username or password."}), 401
+        else:
+            return jsonify({"message": "No admin user found."}), 401
 
 
 @app.route("/detail/<int:id>", methods=["GET"])
@@ -329,4 +334,4 @@ def submit_purchase():
 
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(debug=True, host="0.0.0.0", port=8013)
