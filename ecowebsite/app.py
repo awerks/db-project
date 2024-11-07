@@ -107,6 +107,7 @@ def autocomplete():
 
             if not table or not field:
                 return jsonify({"error": "Table and field parameters are required"}), 400
+
             cursor.execute(f"SELECT {field} FROM {table} LIMIT 100")
             result = [row[0] for row in cursor.fetchall()]
 
