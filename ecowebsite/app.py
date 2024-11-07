@@ -16,7 +16,7 @@ app.logger.addHandler(handler)
 
 @app.before_request
 def log_request():
-    app.logger.debug(f"{request.remote_addr} - {request.method} {request.path}")
+    app.logger.debug(f"{request.remote_addr} - {request.method} - {request.path} - {request.headers['User-Agent']}")
 
 
 # testing purposes
