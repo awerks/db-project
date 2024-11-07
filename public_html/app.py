@@ -1,10 +1,15 @@
 from flask import Flask, render_template, request, send_from_directory, jsonify
 from os import environ
 import pymysql
+import logging
 
 # from sshtunnel import SSHTunnelForwarder
 
 app = Flask(__name__, static_url_path="/static")
+
+app.logger.setLevel(logging.DEBUG)
+handler = logging.FileHandler("app.log")
+app.logger.addHandler(handler)
 
 # testing purposes
 
@@ -41,7 +46,14 @@ def connect_db():
 
 @app.route("/")
 def index():
+    app.logger.debug(f"[{request.remote_addr}]: Index page accessed.")
     return send_from_directory("static", "index.html")
+
+
+@app.errorhandler(500)
+def server_error(error):
+    app.logger.exception("An exception occurred during a request.")
+    return "Internal Server Error", 500
 
 
 @app.route("/maintenance")
@@ -164,6 +176,7 @@ def category_input():
             ],
         },
     ]
+
     return render_template("input_template.html", title="Category", form_action="/submit_category", fields=fields)
 
 
