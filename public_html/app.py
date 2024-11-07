@@ -9,7 +9,15 @@ app = Flask(__name__, static_url_path="/static")
 
 app.logger.setLevel(logging.DEBUG)
 handler = logging.FileHandler("app.log")
+formatter = logging.Formatter("%(asctime)s - %(message)s")
+handler.setFormatter(formatter)
 app.logger.addHandler(handler)
+
+
+@app.before_request
+def log_request():
+    app.logger.debug(f"{request.remote_addr} - {request.method} {request.path}")
+
 
 # testing purposes
 
@@ -46,7 +54,6 @@ def connect_db():
 
 @app.route("/")
 def index():
-    app.logger.debug(f"[{request.remote_addr}]: Index page accessed.")
     return send_from_directory("static", "index.html")
 
 
