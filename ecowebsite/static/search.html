@@ -10,6 +10,10 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+    <script src="/static/js/autocomplete.js"></script>
     <style>
         body {
             font-family: "Poppins", sans-serif;
@@ -176,8 +180,7 @@
     <main>
         <h2>Search the Database</h2>
         <form action="/search_fields" method="POST">
-            <!-- Product Search Fields -->
-            <fieldset>
+            <fieldset id="Product">
                 <legend>Search Products</legend>
                 <label for="product_id">Product ID:</label>
                 <input type="number" id="product_id" name="product_id">
@@ -189,8 +192,7 @@
                 <input type="number" id="price" name="price" step="0.01">
             </fieldset>
 
-            <!-- User Search Fields -->
-            <fieldset>
+            <fieldset id="User">
                 <legend>Search Users</legend>
                 <label for="user_id">User ID:</label>
                 <input type="number" id="user_id" name="user_id">
@@ -209,8 +211,7 @@
                 </select>
             </fieldset>
 
-            <!-- Category Search Fields -->
-            <fieldset>
+            <fieldset id="Category">
                 <legend>Search Categories</legend>
                 <label for="category_id">Category ID:</label>
                 <input type="number" id="category_id" name="category_id">
@@ -230,8 +231,7 @@
                 </select>
             </fieldset>
 
-            <!-- EcoRating Search Fields -->
-            <fieldset>
+            <fieldset id="EcoRating">
                 <legend>Search EcoRatings</legend>
                 <label for="eco_rating_id">Eco Rating ID:</label>
                 <input type="number" id="eco_rating_id" name="eco_rating_id">
@@ -252,8 +252,7 @@
                 <input type="number" id="carbon_footprint" name="carbon_footprint">
             </fieldset>
 
-            <!-- Purchases Search Fields -->
-            <fieldset>
+            <fieldset id="Purchases">
                 <legend>Search Purchases</legend>
                 <label for="purchase_id">Purchase ID:</label>
                 <input type="number" id="purchase_id" name="purchase_id">
@@ -268,24 +267,22 @@
                 <input type="number" id="product_id" name="product_id">
             </fieldset>
 
-            <!-- RatedBy Search Fields -->
-            <fieldset>
+            <fieldset id="RatedBy">
                 <legend>Search RatedBy Relationships</legend>
-                <label for="rated_product_id">Product ID:</label>
-                <input type="number" id="rated_product_id" name="rated_product_id">
+                <label for="product_id">Product ID:</label>
+                <input type="number" id="rated_product_id" name="product_id">
 
-                <label for="rated_eco_rating_id">Eco Rating ID:</label>
-                <input type="number" id="rated_eco_rating_id" name="rated_eco_rating_id">
+                <label for="eco_rating_id">Eco Rating ID:</label>
+                <input type="number" id="rated_eco_rating_id" name="eco_rating_id">
             </fieldset>
 
-            <!-- BelongsTo Search Fields -->
-            <fieldset>
+            <fieldset id="BelongsTo">
                 <legend>Search BelongsTo Relationships</legend>
-                <label for="belongs_product_id">Product ID:</label>
-                <input type="number" id="belongs_product_id" name="belongs_product_id">
+                <label for="product_id">Product ID:</label>
+                <input type="number" id="belongs_product_id" name="product_id">
 
-                <label for="belongs_category_id">Category ID:</label>
-                <input type="number" id="belongs_category_id" name="belongs_category_id">
+                <label for="category_id">Category ID:</label>
+                <input type="number" id="belongs_category_id" name="category_id">
             </fieldset>
 
             <button type="submit">Search</button>
@@ -300,6 +297,8 @@
             <p>&copy; 2024 Sustainable Shopping Assistant | <a href="/imprint">Imprint</a></p>
         </section>
     </footer>
+
+
 </body>
 
 </html>

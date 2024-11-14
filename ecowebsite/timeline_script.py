@@ -1,9 +1,14 @@
 import matplotlib.pyplot as plt
 import datetime
+<<<<<<< HEAD
 from collections import defaultdict
 import matplotlib.lines as mlines
 
 
+=======
+import matplotlib.lines as mlines
+from collections import defaultdict
+>>>>>>> fc93d8d (Added autocomplete)
 log_file = "app.log"
 logs = []
 

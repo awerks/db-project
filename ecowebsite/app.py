@@ -78,6 +78,26 @@ def imprint():
     return send_from_directory("static", "imprint.html")
 
 
+@app.route("/autocomplete", methods=["GET"])
+def autocomplete():
+    connection = connect_db()
+    try:
+        with connection.cursor() as cursor:
+            table = request.args.get("table")
+            field = request.args.get("field")
+            print(f"\n\n\nTable: {table}, Field: {field}")
+
+            if not table or not field:
+                return jsonify({"error": "Table and field parameters are required"}), 400
+            cursor.execute(f"SELECT {field} FROM {table} LIMIT 100")
+            result = [row[0] for row in cursor.fetchall()]
+
+        return jsonify(result)
+
+    finally:
+        connection.close()
+
+
 @app.route("/search_fields", methods=["POST"])
 def search():
     form_data = request.form.to_dict()
@@ -162,6 +182,7 @@ def user_input():
             "options": [{"value": "Customer", "label": "Customer"}, {"value": "EcoReviewer", "label": "EcoReviewer"}],
         },
     ]
+
     return render_template("input_template.html", title="User", form_action="/submit_user", fields=fields)
 
 
@@ -224,6 +245,7 @@ def purchase_input():
         {"id": "user_id", "name": "user_id", "label": "User ID", "type": "number", "required": True},
         {"id": "product_id", "name": "product_id", "label": "Product ID", "type": "number", "required": True},
     ]
+
     return render_template("input_template.html", title="Purchase", form_action="/submit_purchase", fields=fields)
 
 
@@ -281,7 +303,6 @@ def submit_category():
 
     # connection, server = connect_db()
     connection = connect_db()
-
     try:
         with connection.cursor() as cursor:
             cursor.execute(

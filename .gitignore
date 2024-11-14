@@ -4,4 +4,9 @@ __pycache__/
 *.DS_Store
 test.py
 *.log
+<<<<<<< HEAD
 *.png
+=======
+*.png
+.mypy_cache/
+>>>>>>> fc93d8d (Added autocomplete)
