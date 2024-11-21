@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description"
+        content="Map displaying client location based on IP address using Leaflet and OpenStreetMap.">
+    <title>Map - Sustainable Shopping Assistant</title>
+    <link rel="stylesheet" href="/static/styles/style.css">
+    <link rel="icon" type="image/x-icon" href="/static/images/favicon.ico">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        #map {
+            height: calc(100vh - 260px);
+            width: 100%;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <div class="logo">
+            <img src="/static/images/favicon.ico" alt="Logo">
+            <h1><span class="highlight">Sustainable</span> Shopping Assistant</h1>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="/">Home</a></li>
+                <li><a href="/categories">Categories</a></li>
+                <li><a href="/wishlist">Wishlist</a></li>
+                <li><a href="/imprint">Imprint</a></li>
+                <li><a href="/login">Maintenance</a></li>
+                <li><a href="/search">Search</a></li>
+                <li><a href="/map">Map</a></li>
+                
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <div id="map"></div>
+    </main>
+
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script>
+        const latitude = {{ latitude }};
+        const longitude = {{ longitude }};
+        const ipAddress = "{{ ip_address }}";
+
+        const map = L.map('map').setView([latitude, longitude], 13);
+
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; OpenStreetMap contributors'
+        }).addTo(map);
+
+        const marker = L.marker([latitude, longitude]).addTo(map);
+        marker.bindPopup(`Your IP Address: ${ipAddress}`).openPopup();
+    </script>
+</body>
+
+</html>

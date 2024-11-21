@@ -2,6 +2,7 @@ from flask import Flask, render_template, request, send_from_directory, jsonify
 from os import environ
 import pymysql
 import logging
+import requests
 
 # from sshtunnel import SSHTunnelForwarder
 
@@ -30,6 +31,7 @@ MYSQL_PORT = 3306
 MYSQL_USER = environ.get("MYSQL_USER")
 MYSQL_PASSWORD = environ.get("MYSQL_PASSWORD")
 MYSQL_DB = environ.get("MYSQL_DB")
+GEO_TOKEN = environ.get("GEO_TOKEN")
 LOCAL_PORT = 49868
 
 
@@ -76,6 +78,22 @@ def searhh():
 @app.route("/imprint")
 def imprint():
     return send_from_directory("static", "imprint.html")
+
+
+@app.route("/map")
+def map_page():
+    ip_address = request.headers.get("X-Forwarded-For", request.remote_addr)
+    ip_address = ip_address.split(",")[0]  # In case of multiple IP addresses
+
+    response = requests.get(f"https://ipinfo.io/{ip_address}/json?token={GEO_TOKEN}")
+    data = response.json()
+
+    if "loc" in data:
+        latitude, longitude = data["loc"].split(",")
+    else:
+        latitude, longitude = "0", "0"
+
+    return render_template("map.html", ip_address=ip_address, latitude=latitude, longitude=longitude)
 
 
 @app.route("/autocomplete", methods=["GET"])
