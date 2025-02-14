@@ -169,7 +169,7 @@ def detail(id):
         "id": id,
         "name": "Eco-friendly T-shirt",
         "price": 19.99,
-        "description": "A soft, organic cotton t-shirt.",
+        "description": "A soft, organic cotton T-shirt.",
         "category": "Clothing",
         "sustainability": 85,
         "carbon_footprint": 12,
